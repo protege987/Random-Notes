@@ -1,0 +1,55 @@
+# Notes about UAC - User Account Control
+
+consent.exe 
+This binary was found in Lima Charlie log after opening notepad with 'run as administrator'. You can see the file path from the log below :
+
+"C:\\Windows\\system32\\consent.exe"
+
+The file description that can be seen if you check the properties of the binary:
+Consent UI for administrative applications
+
+The default file location for this binary is:
+C:\Windows\System32
+
+The command line for this is : 
+"consent.exe 5688 698 0000026829C3B9C0"
+5688 - this is the parent process ID of consent.exe which is svchost.exe
+648 - this is the process ID for wininit.exe
+
+For the parent from the log we have the following information:
+
+"COMMAND_LINE": "C:\\Windows\\system32\\svchost.exe -k netsvcs -p -s Appinfo"
+"FILE_IS_SIGNED": 1
+"FILE_PATH": "C:\Windows\system32\svchost.exe"
+"PROCESS_ID": 5688
+"USER_NAME":"NT AUTHORITY\SYSTEM"
+svchost.exe - usually see many instance of this process open
+
+svchost.exe > Parent process services.exe (most often)
+
+We can now look at svchost.exe Parent process which is services.exe
+
+"FILE_PATH": "\Device\HarddiskVolume4\Windows\System32\services.exe"
+"FILE_IS_SIGNED": 1
+"PARENT_PROCESS_ID": 648
+"PROCESS_ID": 768
+"USER_NAME":"NT AUTHORITY\SYSTEM"
+services.exe - only 1 instance at a time
+
+Now let's look at services.exe Parent process which is wininit.exe
+
+"FILE_PATH": "\Device\HarddiskVolume4\Windows\System32\wininit.exe"
+"FILE_IS_SIGNED": 1
+"PARENT_PROCESS_ID": 536
+"PROCESS_ID": 648
+"USER_NAME": "NT AUTHORITY\SYSTEM"
+wininit.exe - only 1 instance at a time
+
+wininit.exe - Parent process is smss.exe which after the child process is created exits
+smss.exe - Parent process is System 
+Path: %SystemRoot%\System32\smss.exe
+
+System - is ran by local system with 1 system that starts at boot time
+
+# More information to be added over time as I learn more
+# This information was gathered from logs (Lima Charlie) and used SANS DFIR hunt evil poster as reference for process information (https://www.sans.org/posters/hunt-evil/)
