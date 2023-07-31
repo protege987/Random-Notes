@@ -1,0 +1,49 @@
+# Notes about Touch Keyboard and Handwriting Panel (TabTip.exe) 
+# Windows 11 vm Version 22H2 (OS Build 22621.1992) on VMware® Workstation 17 Pro (Version - 17.0.0 build-20800274)
+
+Trying to learn more about the built-in windows virtual keyboards and how they show in logs 
+we'll be looking at TabTip which we can find here :
+C:\Program Files\Common Files\microsoft shared\ink\TabTip.exe
+
+Description: Touch Keyboard and Handwriting Panel
+I was able to generate this log by manually running TabTip.exe and Lima Charlie was able to collect it as a NEW_PROCESS event
+We we look at one of the log's and trace it back as far as we can
+
+The command line for this in the logs shows as:
+"\"C:\\Program Files\\Common Files\\microsoft shared\\ink\\TabTip.exe\" "
+"FILE_IS_SIGNED": 1
+"FILE_PATH": "C:\Program Files\Common Files\microsoft shared\ink\TabTip.exe"
+"PARENT_PROCESS_ID": 5688
+"PROCESS_ID": 9240
+
+Let's look at the parent process - svchost
+"FILE_PATH": "C:\Windows\system32\svchost.exe"
+"FILE_IS_SIGNED": 1
+"PROCESS_ID": 5688
+"PARENT_PROCESS_ID":768
+"USER_NAME": "NT AUTHORITY\SYSTEM"
+
+We can now look at svchost.exe Parent process which is services.exe
+
+"FILE_PATH": "\Device\HarddiskVolume4\Windows\System32\services.exe"
+"FILE_IS_SIGNED": 1
+"PARENT_PROCESS_ID": 648
+"PROCESS_ID": 768
+"USER_NAME":"NT AUTHORITY\SYSTEM"
+services.exe - only 1 instance at a time
+
+Now let's look at services.exe Parent process which is wininit.exe
+
+"FILE_PATH": "\Device\HarddiskVolume4\Windows\System32\wininit.exe"
+"FILE_IS_SIGNED": 1
+"PARENT_PROCESS_ID": 536
+"PROCESS_ID": 648
+"USER_NAME": "NT AUTHORITY\SYSTEM"
+wininit.exe - only 1 instance at a time
+
+wininit.exe - Parent process is smss.exe which after the child process is created exits
+smss.exe - Parent process is System 
+Path: %SystemRoot%\System32\smss.exe
+
+# More information to be added over time as I learn more
+# This information was gathered from logs (Lima Charlie) and used SANS DFIR hunt evil poster as reference for process information (https://www.sans.org/posters/hunt-evil/)
