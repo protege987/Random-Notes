@@ -1,0 +1,53 @@
+# Notes about TextInputHost.exe
+# Windows 11 vm Version 22H2 (OS Build 22621.1992) on VMware® Workstation 17 Pro (Version - 17.0.0 build-20800274)
+
+This binary was found while scrolling through logs within Lima Charlie and trying to collect logs about (TabTip.exe).
+
+TextInputHost.exe seems to be part of Windows Feature Experience Pack Known as Windows System File or UX.Client.ST.
+TextInputHost.exe enables the text input process in the (UWP) Universal Windows Platform.
+This should allow to enter information into UWP applications and there if we disable it would 
+prevent us from entering information into these UWP associated applications
+
+# Need to test what disabling this would affect.
+
+Log detail below:
+"COMMAND_LINE": ""C:\Windows\SystemApps\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\TextInputHost.exe" -ServerName:InputApp.AppXjd5de1g66v206tj52m9d0dtpppx4cgpn.mca"
+InputApp.AppXjd5de1g66v206tj52m9d0dtpppx4cgpn.mca - This seems to be the package family name and should be the same until updated by Microsoft
+
+"FILE_IS_SIGNED": 1
+"FILE_PATH": "C:\Windows\SystemApps\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\TextInputHost.exe"
+"PROCESS_ID": 532
+Binary ran as user
+
+Parent Process information - svchost.exe
+"FILE_PATH": "C:\Windows\system32\svchost.exe"
+"COMMAND_LINE":"C:\Windows\system32\svchost.exe -k DcomLaunch -p"
+"FILE_IS_SIGNED": 1
+"PROCESS_ID": 960
+"PARENT_PROCESS_ID":768
+"USER_NAME": "NT AUTHORITY\SYSTEM"
+
+We can now look at svchost.exe Parent process which is services.exe
+
+"FILE_PATH": "\Device\HarddiskVolume4\Windows\System32\services.exe"
+"FILE_IS_SIGNED": 1
+"PARENT_PROCESS_ID": 648
+"PROCESS_ID": 768
+"USER_NAME":"NT AUTHORITY\SYSTEM"
+services.exe - only 1 instance at a time
+
+Now let's look at services.exe Parent process which is wininit.exe
+
+"FILE_PATH": "\Device\HarddiskVolume4\Windows\System32\wininit.exe"
+"FILE_IS_SIGNED": 1
+"PARENT_PROCESS_ID": 536
+"PROCESS_ID": 648
+"USER_NAME": "NT AUTHORITY\SYSTEM"
+wininit.exe - only 1 instance at a time
+
+wininit.exe - Parent process is smss.exe which after the child process is created exits
+smss.exe - Parent process is System 
+Path: %SystemRoot%\System32\smss.exe
+
+# More information to be added over time as I learn more
+# This information was gathered from logs (Lima Charlie) and used SANS DFIR hunt evil poster as reference for process information (https://www.sans.org/posters/hunt-evil/)
