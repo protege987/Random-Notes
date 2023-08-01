@@ -1,0 +1,48 @@
+# Notes about sppsvc.exe
+# Windows 11 vm Version 22H2 (OS Build 22621.1992) on VMware® Workstation 17 Pro (Version - 17.0.0 build-20800274)
+
+Microsoft Software Protection Platform Service
+
+Found this process while looking at logs and wanted to learn more about it.
+Will trace back the process to as far back possible
+
+Process description : Microsoft Software Protection Platform Service
+Process location: C:\Windows\System32\sppsvc.exe
+More detailed description:
+This Windows service enables the download, installation and enforcement of digital licenses for Windows and Windows applications. 
+If the service is disabled, the operating system and licensed applications may run in a notification mode. It is strongly 
+recommended that you not disable the Software Protection service.
+source: https://www.bleepingcomputer.com/startups/25807/sppsvc.exe/
+
+This process seems to ran at certain interval from bootup time and check windows license and other Microsoft
+related products for license information. Probably work with KMS
+
+Log Details: 
+"COMMAND_LINE": "C:\Windows\system32\sppsvc.exe"
+"FILE_IS_SIGNED": 1
+"FILE_PATH": "C:\Windows\system32\sppsvc.exe"
+"PROCESS_ID": 4208
+"PARENT_PROCESS_ID": 768
+"USER_NAME": "NT AUTHORITY\NETWORK SERVICE"
+
+Parent Process information:
+"FILE_PATH": "\Device\HarddiskVolume4\Windows\System32\services.exe"
+"FILE_IS_SIGNED": 1
+"USER_NAME": "NT AUTHORITY\SYSTEM"
+"PROCESS_ID": 768
+
+Now let's look at services.exe Parent process which is wininit.exe
+
+"FILE_PATH": "\Device\HarddiskVolume4\Windows\System32\wininit.exe"
+"FILE_IS_SIGNED": 1
+"PARENT_PROCESS_ID": 536
+"PROCESS_ID": 648
+"USER_NAME": "NT AUTHORITY\SYSTEM"
+wininit.exe - only 1 instance at a time
+
+wininit.exe - Parent process is smss.exe which after the child process is created exits
+smss.exe - Parent process is System 
+Path: %SystemRoot%\System32\smss.exe
+
+# More information to be added over time as I learn more
+# This information was gathered from logs (Lima Charlie) and used SANS DFIR hunt evil poster as reference for process information (https://www.sans.org/posters/hunt-evil/)
