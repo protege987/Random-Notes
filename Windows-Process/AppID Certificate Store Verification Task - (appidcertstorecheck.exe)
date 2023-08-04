@@ -1,0 +1,21 @@
+# Notes about appidcertstorecheck.exe
+# Windows 11 vm Version 22H2 (OS Build 22621.1992) on VMware® Workstation 17 Pro (Version - 17.0.0 build-20800274)
+
+Found this one in the logs randomly as usual while procrastinating in Lima Charlie
+As usual another windows process that information is hard to find on
+Will  be documenting information found on google, lima charlie logs, chatgt and bard
+This information is just what I found and could be inaccurate 
+
+appidcertstorecheck.exe is a newer process that is based on the AppIdStore.db file. This file contains a list of certificates that are trusted by Windows. appidcertstorecheck.exe will check the certificates of applications against the list in the AppIdStore.db file to verify that the applications are trusted by Windows.
+This will of all windows applications so that includes third party applications such as Firefox
+
+AppIdPolicyConverter.exe was a legacy process that was based on the AppIdPolicy.xml file.
+This file contained a list of applications that were allowed to run on Windows. AppIdPolicyConverter.exe would check the 
+certificates of applications against the list in the AppIdPolicy.xml file to verify that the applications were allowed to run.
+
+AppIdPolicyConverter.exe seems to have been replaced by Windows 8 for appidcertstorecheck.exe. Since AppIdPolicyConverter.exe it was 
+using a AppIdPolicy.xml file this could be modified as a text file made it not as secure compared to appidcertstorecheck.exe
+which is stored in a database (AppIdStore.db)
+
+AppIdStore.db is stored in C:\ProgramData\Microsoft\Windows\AppRepository
+This folder even if your using a local admin account you are not able to access. To access it 
