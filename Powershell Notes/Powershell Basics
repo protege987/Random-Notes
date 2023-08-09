@@ -1,2 +1,12 @@
 These will be notes I will create as I learn more about powershell.
 I will try have the references for where I learn about the information but there might be ranting
+
+Power is a case insensitive scripting language
+This means both : 
+PS C:\Users\User> Get-NetAdapter | Format-Table -AutoSize
+PS C:\Users\User> GET-NETADAPTER | FORMAT-TABLE -AUTOSIZE
+
+would provide the same information and the outcome will be affected by the letter case
+This command will provide information about network adapters and then formats the output as a table with auto-sized columns
+If the command is ran with | Format-Table -AutoSize
+Then the information will display in more spreadout format but the contents will be the same
