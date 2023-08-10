@@ -10,3 +10,5 @@ would provide the same information and the outcome will be affected by the lette
 This command will provide information about network adapters and then formats the output as a table with auto-sized columns
 If the command is ran with | Format-Table -AutoSize
 Then the information will display in more spreadout format but the contents will be the same
+
+The instance where powershell would be case insensitive is
